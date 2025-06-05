@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MutualFund Portfolio Analyzer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-bg {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <nav class="gradient-bg text-white p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold">Portfolio Analyzer</h1>
+            <div class="space-x-4">
+                <a href="#" class="hover:text-blue-200">About</a>
+                <a href="#" class="hover:text-blue-200">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto px-4 py-8">
+        <div class="max-w-4xl mx-auto">
+            <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+                <h2 class="text-2xl font-bold mb-4">Upload Your Portfolio</h2>
+                <div class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
+                    <i class="bi bi-cloud-upload text-4xl text-blue-500"></i>
+                    <p class="mt-2">Drag and drop your portfolio file here or</p>
+                    <button class="mt-3 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                        Browse Files
+                    </button>
+                    <input type="file" id="fileInput" class="hidden" accept=".csv,.xlsx">
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-2xl font-bold mb-4">Analysis Parameters</h2>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="font-semibold mb-3">Weightage Factors</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm mb-1">Fund Manager Ranking</label>
+                                <input type="range" class="w-full" min="0" max="100" value="50" id="managerWeight">
+                                <span class="text-sm text-gray-500" id="managerWeightValue">50%</span>
+                            </div>
+                            <div>
+                                <label class="block text-sm mb-1">Consistency Score</label>
+                                <input type="range" class="w-full" min="0" max="100" value="50" id="consistencyWeight">
+                                <span class="text-sm text-gray-500" id="consistencyWeightValue">50%</span>
+                            </div>
+                            <div>
+                                <label class="block text-sm mb-1">Drawdown Ratio</label>
+                                <input type="range" class="w-full" min="0" max="100" value="50" id="drawdownWeight">
+                                <span class="text-sm text-gray-500" id="drawdownWeightValue">50%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold mb-3">Additional Metrics</h3>
+                        <div class="space-y-2">
+                            <label class="flex items-center">
+                                <input type="checkbox" class="form-checkbox text-blue-600">
+                                <span class="ml-2">Risk-adjusted Returns</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="form-checkbox text-blue-600">
+                                <span class="ml-2">Expense Ratio Impact</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="form-checkbox text-blue-600">
+                                <span class="ml-2">Portfolio Turnover</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <button class="mt-6 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 w-full md:w-auto">
+                    Analyze Portfolio
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Handle file input
+        document.querySelector('.border-dashed').addEventListener('click', () => {
+            document.getElementById('fileInput').click();
+        });
+
+        document.getElementById('fileInput').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                // Handle file upload logic here
+                console.log('File selected:', file.name);
+            }
+        });
+
+        // Handle range input values
+        ['manager', 'consistency', 'drawdown'].forEach(type => {
+            const slider = document.getElementById(`${type}Weight`);
+            const output = document.getElementById(`${type}WeightValue`);
+            
+            slider.addEventListener('input', function() {
+                output.textContent = this.value + '%';
+            });
+        });
+
+        // Prevent default drag behaviors
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            document.querySelector('.border-dashed').addEventListener(eventName, (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+            });
+        });
+
+        // Handle file drop
+        document.querySelector('.border-dashed').addEventListener('drop', (e) => {
+            const file = e.dataTransfer.files[0];
+            if (file) {
+                // Handle file upload logic here
+                console.log('File dropped:', file.name);
+            }
+        });
+    </script>
+<script>document.body.addEventListener('wheel', e => { if (!e.ctrlKey) return; e.preventDefault(); return }, { passive: false })</script>
+	</body>
+</html>
